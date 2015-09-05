@@ -15,6 +15,6 @@ public class NewUserEvent implements CraftEvent {
     }
 
     public NewUserEvent(MatchResult r) {
-        this(r.group(0));
+        this(r.group(1));
     }
 }

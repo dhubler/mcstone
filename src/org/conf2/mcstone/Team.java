@@ -9,6 +9,8 @@ public class Team {
     private TeamColor color;
     private Set<String> members = new HashSet<String>();
     private Map<String,ActivePlayer> activeMembers = new HashMap<String,ActivePlayer>();
+    private Position spawnPoint = new Position(1, 1, 1);
+    private Position basePosition = new Position(2, 2, 2);
 
     public Team(TeamColor color) {
         this.color = color;
@@ -40,5 +42,13 @@ public class Team {
 
     public Map<String, ActivePlayer> getActivePlayers() {
         return Collections.unmodifiableMap(activeMembers);
+    }
+
+    public Position getBasePosition() {
+        return basePosition;
+    }
+
+    public Position getSpawnPoint() {
+        return spawnPoint;
     }
 }

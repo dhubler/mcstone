@@ -15,6 +15,8 @@ public class StoneGame {
     private Map<String,ActivePlayer> players = new HashMap<String,ActivePlayer>();
     private EventSource events;
     private CommandRunner commands;
+    private int timeLimit;
+    private int baseRadius;
 
     public StoneGame() {
         teams.put(TeamColor.BLUE, new Team(TeamColor.BLUE));
@@ -27,6 +29,10 @@ public class StoneGame {
         addListenerers();
         new Thread(commands).start();
         new Thread(events).start();
+    }
+
+    public void setTimeLimit(int timeLimit) {
+        this.timeLimit = timeLimit;
     }
 
     public void startGame() {
@@ -90,11 +96,27 @@ public class StoneGame {
         }
     }
 
+    public void addTeam(TeamColor color, Team t) {
+        teams.put(color, t);
+    }
+
     public Collection<Team> getTeams() {
         return teams.values();
     }
 
     public Collection<ActivePlayer> getActivePlayers() {
         return players.values();
+    }
+
+    public void setBaseRadius(int baseRadius) {
+        this.baseRadius = baseRadius;
+    }
+
+    public int getBaseRadius() {
+        return baseRadius;
+    }
+
+    public int getTimeLimit() {
+        return timeLimit;
     }
 }

@@ -2,7 +2,10 @@ package org.conf2.mcstone;
 
 import org.conf2.minecraft.CommandRunner;
 import org.conf2.minecraft.EventSource;
-import org.conf2.restconf.Driver;
+import org.conf2.yang.Module;
+import org.conf2.yang.driver.Driver;
+import org.conf2.restconf.Service;
+import org.conf2.yang.SimpleStreamSource;
 
 import java.io.*;
 import java.util.logging.*;
@@ -14,34 +17,35 @@ public class Main {
     private Logger logger = Logger.getLogger("org.conf2.mcstone");
     private EventSource events;
     private CommandRunner commands;
+    private StoneGame game;
+
+    public Main() {
+        game = new StoneGame();
+    }
 
     void loadRestconf() {
         Driver d = new Driver();
-        d.start();
+        Service s = new Service(d);
         String docRootProp = "mcstone.docroot";
         String docRoot = System.getProperty(docRootProp);
         if (docRoot != null) {
             File docRootPath = new File(docRoot);
             if (docRootPath.exists() && docRootPath.isDirectory()) {
-                d.setDocRoot(docRootPath);
+                s.setDocRoot(new SimpleStreamSource(docRootPath));
             } else {
                 logger.log(Level.SEVERE, "Cannot server ui,  invalid dir " + docRoot);
             }
         } else {
             logger.log(Level.SEVERE, "Cannot server ui, system property missing: " + docRootProp);
         }
-        
-        InputStream yang = getClass().getResourceAsStream("mcstone.yang");
-        try {
-            d.loadModule(yang);
-            logger.log(Level.WARNING, "plugin got message that server is starting");
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, "Could not load yang", e);
-        }
+
+        Module m = d.loadModule(new SimpleStreamSource(Main.class), "mcstone-lite.yang");
+        StoneBrowser browser = new StoneBrowser(m, game);
+        s.registerBrowser(browser);
+        s.start();
     }
 
     void startGame(String[] args) throws IOException {
-        StoneGame game = new StoneGame();
         game.init();
         Thread t = new Thread() {
             @Override

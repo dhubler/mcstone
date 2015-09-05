@@ -8,14 +8,11 @@ import java.util.Collection;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-/**
- *
- */
 public class StoneGameTest {
 
     @Test
     public void testYang() {
-        InputStream yang = getClass().getResourceAsStream("mcstone.yang");
+        InputStream yang = getClass().getResourceAsStream("mcstone-lite.yang");
         assertNotNull(yang);
     }
 

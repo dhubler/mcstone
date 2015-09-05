@@ -1,0 +1,59 @@
+module mcstone {
+    namespace "mcstone";
+    prefix "mcstone";
+
+    revision 0000-00-00 {
+        description "xx";
+    }
+
+    grouping position {
+        leaf x {
+            type int32;
+        }
+        leaf y {
+            type int32;
+        }
+        leaf z {
+            type int32;
+        }
+    }
+
+    /* immutable list of active players */
+    list active-players {
+        key "name";
+        leaf name {
+            type string;
+        }
+    }
+
+    container game {
+        list teams {
+            max-elements 4;
+            key "color";
+            leaf color {
+                type enumeration {
+                    enum red;
+                    enum blue;
+                    enum green;
+                    enum yellow;
+                }
+            }
+            leaf-list members {
+                type string;
+            }
+            container spawn-point {
+                uses position;
+            }
+            container base-position {
+                uses position;
+            }
+        }
+        leaf base-radius {
+            type int32;
+            config "true";
+        }
+        leaf time-limit {
+            type int32;
+        }
+    }
+}

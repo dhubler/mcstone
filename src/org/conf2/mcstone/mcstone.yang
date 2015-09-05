@@ -7,34 +7,32 @@ module mcstone {
     }
 
     grouping position {
-        leaf x {
+        leaf recordTime {
             type int32;
         }
-        leaf y {
-            type int32;
-        }
-        leaf z {
-            type int32;
-        }
-    }
-
-    grouping team {
-        leaf color {
-            type enumeration {
-                enum red;
-                enum blue;
-                enum green;
-                enum yellow;
+        choice triple {
+            case cartesion {
+                leaf x {
+                    type int32;
+                }
+                leaf y {
+                    type int32;
+                }
+                leaf z {
+                    type int32;
+                }
             }
-        }
-        leaf-list members {
-            type string;
-        }
-        leaf spawn-point {
-            uses position;
-        }
-        leaf base-position {
-            uses position;
+            case polar {
+                leaf radius {
+                    type int32;
+                }
+                leaf theta {
+                    type int32;
+                }
+                leaf gamma {
+                    type int32;
+                }
+            }
         }
     }
 
@@ -49,8 +47,23 @@ module mcstone {
     container game {
         list teams {
             max-elements 4;
-            container team {
-                uses team;
+            key "color";
+            leaf color {
+                type enumeration {
+                    enum red;
+                    enum blue;
+                    enum green;
+                    enum yellow;
+                }
+            }
+            leaf-list members {
+                type string;
+            }
+            leaf spawn-point {
+                uses position;
+            }
+            leaf base-position {
+                uses position;
             }
         }
         leaf base-radius {
